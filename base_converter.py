@@ -28,14 +28,13 @@ def ValidateInput(input_number, source_base):
     return True
 
 def convert_number(input_number,source_base,target_base):
-    pass #Needs to be coded lol just testing
-
+    pass #Needs to be coded
 
 
 
 print("Number Base Converter")
-print("\nThis progam will easily convert betwwen Deicmal, Binary and Hexadecimal numbers.")
-print("\nPlease enter the following inputs: ")
+print("\n This progam will easily convert betwwen Deicmal, Binary and Hexadecimal numbers.")
+print("\n Please enter the following inputs: ")
 
 
 continue_choice = True
@@ -61,6 +60,7 @@ while(continue_choice != False):
     print("Do you wish to contuinue with other numbers? ")
     print("Enter (Y) to contiue")
     print("Enter (N to quit)")
+    print("Hello")
 
     wish_to_continue = input("Your Choice: ")
 
