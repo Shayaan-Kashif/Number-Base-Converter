@@ -2,7 +2,8 @@ def ValidateInput(input_number, source_base):
     pass #Needs to be coded 
 
 def convert_number(input_number,source_base,target_base):
-    pass #Needs to be coded
+    pass #Needs to be coded lol just testing
+
 
 
 
