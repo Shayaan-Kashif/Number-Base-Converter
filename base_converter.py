@@ -4,7 +4,15 @@ def ValidateInput(input_number, source_base):
         validDigits = ("0", "1")
     
     elif (source_base == "10"):
-        validDigits = ("0", "1", "2", "3", "4", "5", "6", "7", "8", "9")
+        try:
+            float(input_number)
+
+
+        except(ValueError):
+            return False
+        
+        return True
+            
     
     elif (source_base == "16"):
         validDigits = ("0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "A", "B", "C", "D", "E", "F")
@@ -42,11 +50,12 @@ while(continue_choice != False):
     Validated = ValidateInput(input_number, source_base) #Will return true or false depending on if the input is validated
 
     if(Validated == True):
+        print("\nInput Number Was Validated\n")
         converted_num = convert_number(input_number,source_base,target_base)
         print(converted_num)
 
     else:
-        print("The input",input_number,"was not a valid input for base",source_base+".","Please enter a valid number.")
+        print("\nThe input",input_number,"was not a valid input for base",source_base+".","Please enter a valid number.\n")
 
 
     print("Do you wish to contuinue with other numbers? ")
