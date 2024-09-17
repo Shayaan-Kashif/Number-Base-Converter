@@ -1,5 +1,23 @@
 def ValidateInput(input_number, source_base):
-    pass #Needs to be coded 
+    #Checks base and assigns valid digits depending on said base
+    if (source_base == "2"):
+        validDigits = ("0", "1")
+    
+    elif (source_base == "10"):
+        validDigits = ("0", "1", "2", "3", "4", "5", "6", "7", "8", "9")
+    
+    elif (source_base == "16"):
+        validDigits = ("0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "A", "B", "C", "D", "E", "F")
+    
+    #this is to handle invalid base input, can be modified as error will not notify the user of this specific case
+    else:
+        return False
+    
+    #goes through each digit to verify, returns True or False depending on validity
+    for digit in input_number:
+        if (digit not in validDigits):
+            return False
+    return True
 
 def convert_number(input_number,source_base,target_base):
     pass #Needs to be coded
