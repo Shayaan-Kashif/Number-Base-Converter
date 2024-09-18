@@ -31,21 +31,57 @@ def ValidateInput(input_number, source_base):
 def convert_number(input_number,source_base,target_base):
     if(target_base == "2"):
         try:
-            input_number = int(input_number) #Convert to integer and if successful then we continue 
+            input_number = float(input_number) #Convert to integer and if successful then we continue 
             result_list = [] #Empty list to store the values of the result but will be backwrds
+            comp1 = [] #First compliments empty list
             result = "" #Empty string to store the final result in the correct order
+            bin_replacement = {'1': '0', '0':'1','1.0':'0','0.0':'1'} # Dictionary to change binary values for the 1st compliment
+            negative = False #Variable to check if we have a negative number initialized to false
+           
+
+            if(input_number < 0):
+                negative = True
+                input_number = input_number * -1
+            
 
             while(input_number != 0): 
                 rem = input_number%2 # Getting the remanider and storing it in rem
                 result_list.append(str(rem)) # Storing the remainder as a string in the result list
                 input_number = math.floor(input_number/2) #Dividing the number by 2 and flooring it to ensure there are no decimals 
-            
+
+    
             result_list = result_list[::-1] # Reversing the order of the list
+            print("bin value",result_list)
 
-            for num in result_list:
-                result += num #Iterating over the correct order list and storing the result as a single string in result 
+            if(negative == True): #if we have a negative number
+                for num in result_list:
+                    num = bin_replacement[num] #Going through each element and swaping the 0 with 1 and 1 wiht 0 for the first compliment 
+                    comp1.append(num)
+                print("1st compliment",comp1)
+                max_index = len(comp1)-1 #finding the max index number of the list
 
-            return result #The result is returned 
+                while(max_index >= 0): #Startting from the max index which is the element on the far right and checking if it is a 0 if so then we swap to 1n and break the loop else we contiunue till we find one
+                    print("in loop",max_index)
+                    if(comp1[max_index]== "0"):
+                        comp1[max_index] = "1"
+                        break
+
+                    max_index -= 1 # Decreasing so we can move through the elements from right to left
+                print("second comp",comp1)
+                
+                result = "1" #negative numbers always start with 1
+                for num in comp1:
+                    result += num #Joining into a string 
+
+
+                return result #The result is returned 
+                
+
+            else:
+                for num in result_list:
+                    result += num #Iterating over the correct order list and storing the result as a single string in result 
+
+                return result #The result is returned 
 
 
         except(ValueError):
