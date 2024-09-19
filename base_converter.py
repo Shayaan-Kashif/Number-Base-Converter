@@ -29,92 +29,194 @@ def ValidateInput(input_number, source_base):
     return True
 
 def convert_number(input_number,source_base,target_base):
-    if(target_base == "2"):
-        try:
-            input_number = float(input_number) #Convert to integer and if successful then we continue 
-            result_list = [] #Empty list to store the values of the result but will be backwrds
-            comp1 = [] #First compliments empty list
-            result = "" #Empty string to store the final result in the correct order
-            bin_replacement = {'1': '0', '0':'1','1.0':'0','0.0':'1'} # Dictionary to change binary values for the 1st compliment
-            negative = False #Variable to check if we have a negative number initialized to false
-           
+    result = []
+    if source_base == 10 and target_base == 2: #decimal to binary
 
-            if(input_number < 0):
-                negative = True
-                input_number = input_number * -1
+        if input_number<2:
+            result.append(input_number)
+        while(int(input_number/2) != 0):
+            result.append(input_number%2)
+            input_number = int(input_number/2)
+            if(int(input_number/2) == 0):
+                result.append(input_number%2)
             
+        
+        result.reverse()
+        
 
-            while(input_number != 0): 
-                rem = input_number%2 # Getting the remanider and storing it in rem
-                result_list.append(str(rem)) # Storing the remainder as a string in the result list
-                input_number = math.floor(input_number/2) #Dividing the number by 2 and flooring it to ensure there are no decimals 
 
+        
+        return result
     
-            result_list = result_list[::-1] # Reversing the order of the list
-            print("bin value",result_list)
+    elif source_base == 10 and target_base == 16: #decimal to hex
+        if input_number < 16:
+            result.append(input_number)
+        
+        while(int(input_number/16) != 0):
+            result.append(input_number%16)
+            input_number = int(input_number/16)
+            if(int(input_number/16) == 0):
+                result.append(input_number%16)
+        
 
-            if(negative == True): #if we have a negative number
-                for num in result_list:
-                    num = bin_replacement[num] #Going through each element and swaping the 0 with 1 and 1 wiht 0 for the first compliment 
-                    comp1.append(num)
-                print("1st compliment",comp1)
-                max_index = len(comp1)-1 #finding the max index number of the list
-
-                while(max_index >= 0): #Startting from the max index which is the element on the far right and checking if it is a 0 if so then we swap to 1n and break the loop else we contiunue till we find one
-                    print("in loop",max_index)
-                    if(comp1[max_index]== "0"):
-                        comp1[max_index] = "1"
-                        break
-
-                    max_index -= 1 # Decreasing so we can move through the elements from right to left
-                print("second comp",comp1)
-                
-                result = "1" #negative numbers always start with 1
-                for num in comp1:
-                    result += num #Joining into a string 
-
-
-                return result #The result is returned 
-                
-
-            else:
-                for num in result_list:
-                    result += num #Iterating over the correct order list and storing the result as a single string in result 
-
-                return result #The result is returned 
-
-
-        except(ValueError):
-            hex_to_binary_replacement = {'0':'0000','1':'0001','2':'0010','3':'0011','4':'0100','5':'0101','6':'0110','7':'0111','8':'1000','9':'1001',
-                                         'A': '1010', 'B': '1011', 'C': '1100','D':'1101','E':'1110','F':'1111'} #Dictionary to map the hex values to their corresponding binary values
-            hex_list = list(input_number) # Turning the users input into a list
-            result = "" #Empty string to store the result 
-
-            for hex in hex_list: #iterating over the list 
-                hex = hex_to_binary_replacement[hex] #For each value in the users list it is mapped to its binary value 
-                result += hex # the mapped value is joined into a string
             
-            return result #The result is returned 
+        result.reverse()
 
+        
+        
 
-    if(target_base == "10"): #If the user wants to convert to decimal 
-        num_list = list(input_number) #Split the user input into a list
-        iteration = len(num_list) - 1 # This is the power the source base will be raised to 
-        hex_replacement = {'A': 10, 'B': 11, 'C': 12,'D':13,'E':14,'F':15} # Dictionary to map hex values
-        result = 0 # Variable to store result
+        alpha = {10:"A", 11:"B", 12:"C", 13:"D",14:"E", 15:"F"}
 
-        for num in num_list:
-            if(num in hex_replacement):
-                num = hex_replacement[num] # If the character being iterated over is a hex letter it is mapped to its number value
-
-            result += float(num) * math.pow(int(source_base), iteration) # Converstion from binary to decimal or Hex to decimal
-            iteration -= 1 #Subtracting by one as the code is solving it from left to right
-
-        return result #The result is returned 
+        for i in range(0,len(result)):
+            if result[i]>9:
+                result[i] = alpha[result[i]]
+        
+        return result
     
 
-    if(target_base == "16"):
-        pass
+    
+    elif source_base == 2 and target_base == 10: # binary to decimal
+        num = []
+        for digit in str(input_number):
+            num.append(digit)
+        
+        num.reverse()
+        sum = 0
+
+        for i in range(0,len(num)):
+            sum+= int(num[i])*2**i
+        
+        return sum
+    
+    elif source_base == 16 and target_base == 10: #hex to decimal
+        num = []
+        alpha_reverse = {"A":10, "B":11, "C":12, "D":13, "E":14, "F":15}
+        for digit in str(input_number):
+            try:
+                number = int(digit)
+                num.append(number)
+            except Exception as e:
+                num.append(alpha_reverse[digit])
+            
+        num.reverse()
+
+        sum = 0; 
+
+        for i in range(0,len(num)):
+            sum+= int(num[i])*16**i
+        
+        return sum
+    
+    elif source_base == 16 and target_base == 2: #hex to binary
+
+
+        #first from hex to decimal
+        num = []
+        alpha_reverse = {"A":10, "B":11, "C":12, "D":13, "E":14, "F":15}
+        for digit in str(input_number):
+            try:
+                number = int(digit)
+                num.append(number)
+            except Exception as e:
+                num.append(alpha_reverse[digit])
+            
+        num.reverse()
+
+        sum = 0; 
+
+        for i in range(0,len(num)):
+            sum+= int(num[i])*16**i
+        
+        input_number = sum
+        
+        #then decimal to binary, all of which is code from previous else statements
+        result = []
+
+        if input_number<2:
+            result.append(input_number)
+        while(int(input_number/2) != 0):
+            result.append(input_number%2)
+            input_number = int(input_number/2)
+            if(int(input_number/2) == 0):
+                result.append(input_number%2)
+            
+        
+        result.reverse()
+
+        return result 
+    
+
+    elif source_base == 2 and target_base == 16: #binary to hex
+        #first binary to decimal
+        num = []
+        for digit in str(input_number):
+            num.append(digit)
+        
+        num.reverse()
+        sum = 0
+
+        for i in range(0,len(num)):
+            sum+= int(num[i])*2**i
+        
+        input_number = sum
+        
+
+        #then decimal to hex
+        if input_number < 16:
+            result.append(input_number)
+        
+        while(int(input_number/16) != 0):
+            result.append(input_number%16)
+            input_number = int(input_number/16)
+            if(int(input_number/16) == 0):
+                result.append(input_number%16)
+        
+
+            
+        result.reverse()
+
+        
+        
+
+        alpha = {10:"A", 11:"B", 12:"C", 13:"D",14:"E", 15:"F"}
+
+        for i in range(0,len(result)):
+            if result[i]>9:
+                result[i] = alpha[result[i]]
+        
+        return result
+
+
+
+
+
+
+
+
+
+            
+
+
+
+
+
+
+
+
+            
+        
+
+
+
+
+
+
+
+
+
+    
+    
+    
 
 
 
@@ -123,14 +225,19 @@ print("\n This progam will easily convert betwwen Deicmal, Binary and Hexadecima
 print("\n Please enter the following inputs: ")
 
 
+print(convert_number(10101011,2,16))
+
+
+'''
+
 continue_choice = True
 
 
 while(continue_choice != False):
 
     input_number = input("\nThe number to convert: ")
-    source_base = input("\ni.e, the base to convert from: ")
-    target_base = input("\ni,e, the base to convert to: ")
+    source_base = input("\ni.e, the base to convert from: ") #string
+    target_base = input("\ni,e, the base to convert to: ") #string
 
     Validated = ValidateInput(input_number, source_base) #Will return true or false depending on if the input is validated
 
@@ -161,7 +268,7 @@ print("\nQuitting calculator... Thank you!!!\n")
 
 
 
-
+'''
  
 
 
