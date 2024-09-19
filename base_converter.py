@@ -30,7 +30,7 @@ def ValidateInput(input_number, source_base):
 
 def convert_number(input_number,source_base,target_base):
     if(target_base == "2"):
-        try:
+        if(source_base == "10"):
             input_number = float(input_number) #Convert to integer and if successful then we continue 
             result_list = [] #Empty list to store the values of the result but will be backwrds
             comp1 = [] #First compliments empty list
@@ -84,7 +84,7 @@ def convert_number(input_number,source_base,target_base):
                 return result #The result is returned 
 
 
-        except(ValueError):
+        else:
             hex_to_binary_replacement = {'0':'0000','1':'0001','2':'0010','3':'0011','4':'0100','5':'0101','6':'0110','7':'0111','8':'1000','9':'1001',
                                          'A': '1010', 'B': '1011', 'C': '1100','D':'1101','E':'1110','F':'1111'} #Dictionary to map the hex values to their corresponding binary values
             hex_list = list(input_number) # Turning the users input into a list
