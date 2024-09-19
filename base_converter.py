@@ -123,7 +123,7 @@ def convert_number(input_number,source_base,target_base):
                                      '1010': 'A', '1011': 'B', '1100': 'C', '1101': 'D', '1110': 'E', '1111': 'F'}
         
 
-        if((num_of_one+num_of_zero) == length_of_list):
+        if(source_base == "2"):
             #code for binary 
             if(length_of_list % 4== 0):
                 count = 0
