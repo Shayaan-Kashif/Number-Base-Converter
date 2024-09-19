@@ -114,7 +114,67 @@ def convert_number(input_number,source_base,target_base):
     
 
     if(target_base == "16"):
-        pass
+        input_number = list(input_number)
+        length_of_list = len(input_number)
+        num_of_one = input_number.count('1')
+        num_of_zero = input_number.count('0')
+        result = ""
+        binary_to_hex_replacement = {'0000': '0', '0001': '1', '0010': '2', '0011': '3', '0100': '4', '0101': '5', '0110': '6', '0111': '7', '1000': '8', '1001': '9', 
+                                     '1010': 'A', '1011': 'B', '1100': 'C', '1101': 'D', '1110': 'E', '1111': 'F'}
+        
+
+        if((num_of_one+num_of_zero) == length_of_list):
+            #code for binary 
+            if(length_of_list % 4== 0):
+                count = 0
+                placeholder = ""
+                for num in input_number: #Loop where the conversion will take place
+                    placeholder += num
+
+                    if(count == 3):
+                        result += binary_to_hex_replacement[placeholder]
+                        placeholder = ""
+                        count = -1
+
+                    count += 1
+                
+                return result
+
+            elif(length_of_list % 4 == 1):
+                zero_add = 3
+                while(zero_add != 0):
+                    input_number.insert(0,0)
+                    zero_add -= 1
+
+            elif(length_of_list == 2):
+                zero_add = 2
+                while(zero_add != 0):
+                    input_number.insert(0,0)
+                    zero_add -= 1
+
+            else:# if the remainder is 3
+                input_number.insert(0,0)
+
+            
+            count = 0
+            placeholder = ""
+            for num in input_number: #Loop where the conversion will take place
+                placeholder += str(num)
+
+                if(count == 3):
+                    result += binary_to_hex_replacement[placeholder]
+                    placeholder = ""
+                    count = -1
+
+                count += 1
+        
+            return result
+
+
+        else:
+            pass #code for deciaml
+
+        
 
 
 
