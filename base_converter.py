@@ -36,7 +36,7 @@ while(continue_choice != False):
 
     wish_to_continue = input("Your Choice: ")
 
-    if(wish_to_continue == "Y"):
+    if(wish_to_continue == "Y" or wish_to_continue == "y"):
         pass #do nothing as the continue_choice variable is already set to true
 
     else:
