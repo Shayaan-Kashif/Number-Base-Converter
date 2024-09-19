@@ -150,11 +150,23 @@ while(continue_choice != False):
 
     wish_to_continue = input("\nYour Choice: ")
 
+    while(wish_to_continue != "Y" and wish_to_continue != "y" and wish_to_continue != "N" and wish_to_continue != "n"):
+        print("\nYou entered an invalid choice. Please try again.")
+        print("\n\nDo you wish to contuinue with other numbers? ")
+        print("Enter (Y) to contiue")
+        print("Enter (N to quit)")
+
+        wish_to_continue = input("Your Choice: ")
+
+
+       
     if(wish_to_continue == "Y" or wish_to_continue == "y"):
         pass #do nothing as the continue_choice variable is already set to true
 
     else:
         continue_choice = False
+
+   
 
 
 print("\nQuitting calculator... Thank you!!!\n")
