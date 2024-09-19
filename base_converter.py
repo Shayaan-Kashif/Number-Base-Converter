@@ -146,7 +146,7 @@ def convert_number(input_number,source_base,target_base):
                     input_number.insert(0,0)
                     zero_add -= 1
 
-            elif(length_of_list == 2):
+            elif(length_of_list % 4 == 2):
                 zero_add = 2
                 while(zero_add != 0):
                     input_number.insert(0,0)
