@@ -114,7 +114,89 @@ def convert_number(input_number,source_base,target_base):
     
 
     if(target_base == "16"):
-        pass
+        input_number_backup = input_number
+        input_number = list(input_number)
+        length_of_list = len(input_number)
+        num_of_one = input_number.count('1')
+        num_of_zero = input_number.count('0')
+        result = ""
+        binary_to_hex_replacement = {'0000': '0', '0001': '1', '0010': '2', '0011': '3', '0100': '4', '0101': '5', '0110': '6', '0111': '7', '1000': '8', '1001': '9', 
+                                     '1010': 'A', '1011': 'B', '1100': 'C', '1101': 'D', '1110': 'E', '1111': 'F'}
+        
+
+        if(source_base == "2"):
+            #code for binary 
+            if(length_of_list % 4== 0):
+                count = 0
+                placeholder = ""
+                for num in input_number: #Loop where the conversion will take place
+                    placeholder += num
+
+                    if(count == 3):
+                        result += binary_to_hex_replacement[placeholder]
+                        placeholder = ""
+                        count = -1
+
+                    count += 1
+                
+                return result
+
+            elif(length_of_list % 4 == 1):
+                zero_add = 3
+                while(zero_add != 0):
+                    input_number.insert(0,0)
+                    zero_add -= 1
+
+            elif(length_of_list % 4 == 2):
+                zero_add = 2
+                while(zero_add != 0):
+                    input_number.insert(0,0)
+                    zero_add -= 1
+
+            else:# if the remainder is 3
+                input_number.insert(0,0)
+
+            
+            count = 0
+            placeholder = ""
+            for num in input_number: #Loop where the conversion will take place
+                placeholder += str(num)
+
+                if(count == 3):
+                    result += binary_to_hex_replacement[placeholder]
+                    placeholder = ""
+                    count = -1
+
+                count += 1
+        
+            return result
+
+
+        else:
+            input_number = input_number_backup
+            input_number = float(input_number) #Convert to integer and if successful then we continue 
+            result_list = [] #Empty list to store the values of the result but will be backwrds
+            result = "" #Empty string to store the final result in the correct order
+            deci_replacement = {'10.0':'A', "11.0":'B','12.0':'C','13.0':'D','14.0':'E','15.0':'F'} # Dictionary to map decimal values to hex
+
+
+            while(input_number != 0): 
+                rem = input_number%16 # Getting the remanider and storing it in rem
+                result_list.append(str(rem)) # Storing the remainder as a string in the result list
+                input_number = math.floor(input_number/16) #Dividing the number by 2 and flooring it to ensure there are no decimals 
+
+            result_list = result_list[::-1]
+
+
+            for num in result_list:
+                if(num in deci_replacement):
+                    num = deci_replacement[num]
+                else:
+                    num = str(int(float(num)))
+                
+                result += num
+            
+            return result
 
 
 
