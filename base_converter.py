@@ -114,6 +114,7 @@ def convert_number(input_number,source_base,target_base):
     
 
     if(target_base == "16"):
+        input_number_backup = input_number
         input_number = list(input_number)
         length_of_list = len(input_number)
         num_of_one = input_number.count('1')
@@ -172,9 +173,30 @@ def convert_number(input_number,source_base,target_base):
 
 
         else:
-            pass #code for deciaml
+            input_number = input_number_backup
+            input_number = float(input_number) #Convert to integer and if successful then we continue 
+            result_list = [] #Empty list to store the values of the result but will be backwrds
+            result = "" #Empty string to store the final result in the correct order
+            deci_replacement = {'10.0':'A', "11.0":'B','12.0':'C','13.0':'D','14.0':'E','15.0':'F'} # Dictionary to map decimal values to hex
 
-        
+
+            while(input_number != 0): 
+                rem = input_number%16 # Getting the remanider and storing it in rem
+                result_list.append(str(rem)) # Storing the remainder as a string in the result list
+                input_number = math.floor(input_number/16) #Dividing the number by 2 and flooring it to ensure there are no decimals 
+
+            result_list = result_list[::-1]
+
+
+            for num in result_list:
+                if(num in deci_replacement):
+                    num = deci_replacement[num]
+                else:
+                    num = str(int(float(num)))
+                
+                result += num
+            
+            return result
 
 
 
