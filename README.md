@@ -2,9 +2,7 @@
 
 ## Features to be implemented
 
-- Code validation function for binary, decimal and hexadecimal 
-- Code convert number funtion 
-- Code ability to convert decimal numbers 
-- Code ability to converty negative numbers
-
-
+- Code validation function for fixed point binary, fixed point and floating point hex and binary. (Done)
+- Code to handle decimal fractions
+- Code to handle binary floats and fixed points
+- Code to handle hexadecimal floats and fixed points
