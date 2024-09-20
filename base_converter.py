@@ -3,7 +3,7 @@ import math
 def ValidateInput(input_number, source_base):
     #Checks base and assigns valid digits depending on said base
     if (source_base == "2"):
-        validDigits = ("0", "1")
+        validDigits = ("0", "1", ".", "x")
     
     elif (source_base == "10"):
         try:
@@ -16,7 +16,7 @@ def ValidateInput(input_number, source_base):
             
     
     elif (source_base == "16"):
-        validDigits = ("0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "A", "B", "C", "D", "E", "F")
+        validDigits = ("0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "A", "B", "C", "D", "E", "F", ".", "x")
     
     #this is to handle invalid base input, can be modified as error will not notify the user of this specific case
     else:
