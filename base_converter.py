@@ -39,7 +39,7 @@ def to_binary(input_number, source_base, target_base):
         bin_replacement = {'1': '0', '0':'1','1.0':'0','0.0':'1'} # Dictionary to change binary values for the 1st compliment
         negative = False #Variable to check if we have a negative number initialized to false
         
-
+        #Checks if the number is negative
         if(input_number < 0):
             negative = True
             input_number = input_number * -1
@@ -101,9 +101,11 @@ def to_binary(input_number, source_base, target_base):
 
 
 def convert_number(input_number,source_base,target_base):
+
+    #If the user wishes to convert from either decimal or hex to binary 
     if(target_base == "2"):
-        result = to_binary(input_number,source_base,target_base)
-        return result
+        result = to_binary(input_number,source_base,target_base) #calling the to binary funtion to convert the number to binary
+        return result #returning the result 
 
 
     if(target_base == "10"): #If the user wants to convert to decimal 
@@ -121,26 +123,33 @@ def convert_number(input_number,source_base,target_base):
 
         return result #The result is returned 
     
-
+    #If the user wishes to convert to hex
     if(target_base == "16"):
-        input_number_backup = input_number
-        input_number = list(input_number)
-        length_of_list = len(input_number)
-        adjusted_source_base = False
+        input_number_backup = input_number #Sorting the users input into a backup variable to preserve the original input for later use
+        input_number = list(input_number) #tunring the input into a list 
+        length_of_list = len(input_number) # Finding the length of the list as it will be used later
+        adjusted_source_base = False #This varaible will be used to route to the binary if statment 
         result = ""
         binary_to_hex_replacement = {'0000': '0', '0001': '1', '0010': '2', '0011': '3', '0100': '4', '0101': '5', '0110': '6', '0111': '7', '1000': '8', '1001': '9', 
                                      '1010': 'A', '1011': 'B', '1100': 'C', '1101': 'D', '1110': 'E', '1111': 'F'}
         
-        if(input_number[0]=="-"):
-            input_number = input_number_backup
-            input_number = to_binary(input_number, source_base, 2)
-            input_number = list(input_number)
-            length_of_list = len(input_number)
-            adjusted_source_base = True
+        if(input_number[0]=="-"): #Checking if the first character is a "-" which means the input is negative 
+            input_number = input_number_backup #getting the original users input and re assigning to input_value
+            input_number = to_binary(input_number, source_base, 2) #seding the negaive number to be converted to binary. THis will return the second compliment
+            input_number = list(input_number) #TUnrnign the result into a list 
+            length_of_list = len(input_number) #finding the new length of the list
+            adjusted_source_base = True # Setting the adjusted base to true since the users original source base was 10
         
-
+        #If the users source base is 2 or if the adjusted base is true the following code will execute 
         if(source_base == "2" or adjusted_source_base == True):
-            #code for binary 
+
+            """
+            The code below checks to see if the binary numb er can be broken down into groups of 4 bits. 
+            If it cannot then it will find the remainder. The remandier value will be 0 if it can be broken down into 
+            bits of 4. And it will be either 1,2 or 3 if the binary number cannot be broken into 4 bits. if the remandier is 1
+            that means 2 numbers either 00 or 11 have to be added to the start of the list in order to ensure it can be broken into 
+            4 bits. Two 00 are added if the number is positive and two 11 are added if it is negative.
+            """
             if(length_of_list % 4== 0):
                 count = 0
                 placeholder = ""
@@ -196,11 +205,11 @@ def convert_number(input_number,source_base,target_base):
 
                 count += 1
         
-            return result
+            return result #Returning the result
 
 
-        else:
-            input_number = input_number_backup
+        else: #Handles conversions of base 10 to base 16
+            input_number = input_number_backup #Recalling the backup number 
             input_number = float(input_number) #Convert to integer and if successful then we continue 
             result_list = [] #Empty list to store the values of the result but will be backwrds
             result = "" #Empty string to store the final result in the correct order
@@ -212,18 +221,19 @@ def convert_number(input_number,source_base,target_base):
                 result_list.append(str(rem)) # Storing the remainder as a string in the result list
                 input_number = math.floor(input_number/16) #Dividing the number by 2 and flooring it to ensure there are no decimals 
 
-            result_list = result_list[::-1]
+            result_list = result_list[::-1] #Reversing the list
 
 
             for num in result_list:
+                #Iterating overt the list to check if the current element is in the dictionary and if it is then we swap the value of the varaible to the value for the key
                 if(num in deci_replacement):
                     num = deci_replacement[num]
                 else:
-                    num = str(int(float(num)))
+                    num = str(int(float(num))) #num is multi casted. It is first casted to float then into int and then into string
                 
-                result += num
+                result += num # Adding the string value of num into the result 
             
-            return result
+            return result #Returning the result 
 
 
 
