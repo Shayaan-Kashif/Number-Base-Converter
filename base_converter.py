@@ -237,27 +237,58 @@ def convert_number(input_number,source_base,target_base):
 
 
 
-print("Number Base Converter")
-print("\nThis progam will easily convert betwwen Deicmal, Binary and Hexadecimal numbers.")
-print("\nPlease enter the following inputs: ")
+print("\n----Number Base Converter---")
+print("\nThis progam will easily convert between Deicmal, Binary and Hexadecimal numbers.")
+print("\nInstructions:\n1. Enter the number you'd like to convert\n2. Enter the base you would like to convert from\n3. Enter the base you want to convert to\n4. You can exit anytime by entering the command \"-Exit\" or by entering \"N\" after a conversion")
+print("\n\nPlease enter the following inputs: ")
 
 
 continue_choice = True
+exit_choice = False
 
 
 
-while(continue_choice != False):
+while(continue_choice != False or exit_choice == True):
 
     choice_left = ["2","10","16"]
 
     input_number = input("\nPlease enter the number to convert: ")
+
+    if(input_number == "-Exit"):
+        exit_choice == True
+        break
+
     source_base = input("\nPlease enter the base to convert from: ")
+
+    if(source_base == "-Exit"):
+        exit_choice == True
+        break
 
     while(source_base != "2" and source_base !="10" and source_base != "16"):
         print("We do not support converting from that base.")
         source_base = input("\nPlease enter the base to convert from: ")
 
+    
+    Validated = ValidateInput(input_number, source_base) #Will return true or false depending on if the input is validated
+
+    while(Validated == False or input_number == " -Exit"):
+        print("\nThe input",input_number,"was not a valid input for base",source_base+".","Please enter a valid number.\n")
+        input_number = input("\nPlease enter another valid number to convert to: ")
+
+        if(input_number == "-Exit"):
+            exit_choice == True
+            break
+
+        Validated = ValidateInput(input_number, source_base) #Will return true or false depending on if the input is validated
+       
+    if(input_number == "-Exit"):
+        exit_choice == True
+        break
+
     target_base = input("\nPlease enter the base to convert to: ")
+    if(target_base == "-Exit"):
+        exit_choice == True
+        break
 
    
     
@@ -271,6 +302,10 @@ while(continue_choice != False):
             print("You can pick between:",choice_left[0],"or",choice_left[1])
 
             target_base = input("\nPlease enter the base to convert to: ")
+            if(target_base == "-Exit"):
+                exit_choice == True
+                break
+
 
 
         if(target_base != source_base and target_base not in choice_left):
@@ -279,14 +314,10 @@ while(continue_choice != False):
             print("Your choices avalible are:",choice_left[0],"and",choice_left[1])
             
             target_base = input("\nPlease enter the base to convert to: ")
+            if(target_base == "-Exit"):
+                exit_choice == True
+                break
 
-    Validated = ValidateInput(input_number, source_base) #Will return true or false depending on if the input is validated
-
-    while(Validated == False):
-        print("\nThe input",input_number,"was not a valid input for base",source_base+".","Please enter a valid number.\n")
-        input_number = input("\nPlease enter the number to convert: ")
-        Validated = ValidateInput(input_number, source_base) #Will return true or false depending on if the input is validated
-       
 
 
     print("\nInput Number Was Validated\n")
@@ -304,7 +335,7 @@ while(continue_choice != False):
         print("\nYou entered an invalid choice. Please try again.")
         print("\n\nDo you wish to contuinue with other numbers? ")
         print("Enter (Y) to contiue")
-        print("Enter (N to quit)")
+        print("Enter (N) to quit")
 
         wish_to_continue = input("Your Choice: ")
 
