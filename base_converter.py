@@ -238,29 +238,60 @@ def convert_number(input_number,source_base,target_base):
 
 
 print("Number Base Converter")
-print("\n This progam will easily convert betwwen Deicmal, Binary and Hexadecimal numbers.")
-print("\n Please enter the following inputs: ")
+print("\nThis progam will easily convert betwwen Deicmal, Binary and Hexadecimal numbers.")
+print("\nPlease enter the following inputs: ")
 
 
 continue_choice = True
 
 
+
 while(continue_choice != False):
 
-    input_number = input("\nThe number to convert: ")
-    source_base = input("\ni.e, the base to convert from: ")
-    target_base = input("\ni,e, the base to convert to: ")
+    choice_left = ["2","10","16"]
+
+    input_number = input("\nPlease enter the number to convert: ")
+    source_base = input("\nPlease enter the base to convert from: ")
+
+    while(source_base != "2" and source_base !="10" and source_base != "16"):
+        print("We do not support converting from that base.")
+        source_base = input("\nPlease enter the base to convert from: ")
+
+    target_base = input("\nPlease enter the base to convert to: ")
+
+   
+    
+    index = choice_left.index(source_base)
+
+    choice_left.pop(index)
+
+    while(target_base not in choice_left):
+        while(target_base == source_base):
+            print("You cannot convert between same bases As there is no change from the input number.")
+            print("You can pick between:",choice_left[0],"or",choice_left[1])
+
+            target_base = input("\nPlease enter the base to convert to: ")
+
+
+        if(target_base != source_base and target_base not in choice_left):
+            print("target and source not equal")
+            print("We do not convert to that base.")
+            print("Your choices avalible are:",choice_left[0],"and",choice_left[1])
+            
+            target_base = input("\nPlease enter the base to convert to: ")
 
     Validated = ValidateInput(input_number, source_base) #Will return true or false depending on if the input is validated
 
-    if(Validated == True):
-        print("\nInput Number Was Validated\n")
-        converted_num = convert_number(input_number,source_base,target_base)
-        print("\nThe result is:",converted_num)
-
-    else:
+    while(Validated == False):
         print("\nThe input",input_number,"was not a valid input for base",source_base+".","Please enter a valid number.\n")
+        input_number = input("\nPlease enter the number to convert: ")
+        Validated = ValidateInput(input_number, source_base) #Will return true or false depending on if the input is validated
+       
 
+
+    print("\nInput Number Was Validated\n")
+    converted_num = convert_number(input_number,source_base,target_base)
+    print("\nThe result is:",converted_num)
 
     print("\nDo you wish to contuinue with other numbers? ")
     print("Enter (Y) to contiue")
