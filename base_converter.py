@@ -29,24 +29,94 @@ def ValidateInput(input_number, source_base):
     return True
 
 def convert_number(input_number,source_base,target_base):
-    result = []
+    result = [] #for int
+    result_decimal = [] #for decimal
+
+
+
+    try:
+        input_number/=1 #make sure that it has decimal, whethir it be a whole number or not: ex 5 will become 5.0
+        whole_number = str(input_number).split(".")
+        input_number = int(whole_number[0])
+        decimal_number = int(whole_number[1])
+       
+    
+    except Exception as e: #for hex
+        whole_number = str(input_number).split(".")
+        input_number = str(whole_number[0])
+        if len(whole_number) == 1:
+            decimal_number = "0"
+        else:
+            decimal_number = str(whole_number[1])
+
+    
+
     if source_base == 10 and target_base == 2: #decimal to binary
 
-        if input_number<2:
+        if int(input_number)<2:
             result.append(input_number)
-        while(int(input_number/2) != 0):
+        while(int(int(input_number)/2) != 0):
             result.append(input_number%2)
             input_number = int(input_number/2)
             if(int(input_number/2) == 0):
                 result.append(input_number%2)
+
+        #fraction
+
+        tens = len(str(decimal_number))
+        
+        decimal_number = int(decimal_number)/(10**tens)
+
+        counter = 0
+        while(decimal_number!=0.0) and (counter < 5):
+            
+            decimal_number = decimal_number*2
+            carry = int(decimal_number)
+            result_decimal.append(carry)
+
+            decimal_number = decimal_number - carry
+            counter+=1
+            
+        
+        
+
+
+
+            
+            
+
+
+
             
         
         result.reverse()
+
+
+       
+        integer_part =""
+        if len(result) == 0:
+            integer_part = "0."
+
+        result.append(".")
+
+        for digit in result:
+            integer_part+=str(digit)
+        
+        decimal_part = ""
+        if len(result_decimal) == 0:
+            decimal_part = "0"
+        
+        for digit in result_decimal:
+            decimal_part+= str(digit)
+        
+        whole_number = integer_part+decimal_part
+
+        
         
 
 
         
-        return result
+        return whole_number 
     
     elif source_base == 10 and target_base == 16: #decimal to hex
         if input_number < 16:
@@ -70,8 +140,66 @@ def convert_number(input_number,source_base,target_base):
         for i in range(0,len(result)):
             if result[i]>9:
                 result[i] = alpha[result[i]]
+
+
+        #fraction
         
-        return result
+
+        tens = len(str(decimal_number))
+        
+        decimal_number = decimal_number/(10**tens)
+
+        counter = 0
+        while(decimal_number!=0.0) and (counter < 5):
+            
+            decimal_number = decimal_number*16
+            carry = int(decimal_number)
+            result_decimal.append(carry)
+
+            decimal_number = decimal_number - carry
+            counter+=1
+        
+
+        for i in range(0,len(result_decimal)):
+            if result_decimal[i] > 9:
+                result_decimal[i] = alpha[result_decimal[i]]
+
+
+
+        
+        integer_part = ""
+        decimal_part = ""
+
+        if len(result) == 0:
+            integer_part = "0."
+        else:
+            result.append(".")
+            for digit in result:
+                integer_part+= str(digit)
+            
+        if len(result_decimal) == 0:
+            decimal_part = "0"
+        else:
+            for digit in result_decimal:
+                decimal_part += str(digit)
+
+        
+            
+        whole_number = integer_part + decimal_part
+
+        
+        
+
+
+
+    
+        
+        
+            
+        
+
+        
+        return whole_number
     
 
     
@@ -86,7 +214,27 @@ def convert_number(input_number,source_base,target_base):
         for i in range(0,len(num)):
             sum+= int(num[i])*2**i
         
-        return sum
+
+        #for fraction
+        sum_fraction = 0
+
+        num_fraction = []
+        for digit in decimal_number:
+            num_fraction.append(int(digit))
+        
+        
+        
+        for i in range(0,len(num_fraction)):
+            sum_fraction+= (num_fraction[i])*2**(-(i+1))
+
+        
+
+
+
+
+
+        
+        return sum+ sum_fraction
     
     elif source_base == 16 and target_base == 10: #hex to decimal
         num = []
@@ -105,9 +253,32 @@ def convert_number(input_number,source_base,target_base):
         for i in range(0,len(num)):
             sum+= int(num[i])*16**i
         
-        return sum
+        #for fraction
+        num = []
+        
+
+        for digit in decimal_number:
+            try: 
+                number = int(digit)
+                num.append(number)
+
+            except Exception as e:
+                num.append(alpha_reverse[digit])
+        
+        sum_decimal = 0
+            
+        for i in range(0,len(num)):
+            sum_decimal += (int(num[i]))*16**(-(i+1))
+
+        
+
+
+
+
+        
+        return sum+sum_decimal
     
-    elif source_base == 16 and target_base == 2: #hex to binary
+    elif source_base == 16 and target_base == 2: #hex to binary--------------------------------------------------------------------------------------------------
 
 
         #first from hex to decimal
@@ -122,7 +293,7 @@ def convert_number(input_number,source_base,target_base):
             
         num.reverse()
 
-        sum = 0; 
+        sum = 0 
 
         for i in range(0,len(num)):
             sum+= int(num[i])*16**i
@@ -143,10 +314,64 @@ def convert_number(input_number,source_base,target_base):
         
         result.reverse()
 
-        return result 
+
+        #fraction
+        num = []
+        for digit in decimal_number:
+            try:
+                number = int(digit)
+                num.append(number)
+            except Exception as e:
+                num.append(alpha_reverse[digit])
+        
+        sum_decimal=0
+
+        for i in range(0,len(num)):
+            sum_decimal += (int(num[i]))*16**(-(i+1))
+
+        decimal_number = sum_decimal
+        result_decimal = []
+        counter = 0
+    
+        while(decimal_number!=0.0) and (counter < 5):
+            
+            decimal_number = decimal_number*2
+            carry = int(decimal_number)
+            result_decimal.append(carry)
+
+            decimal_number = decimal_number - carry
+            counter+=1
+        
+
+
+        integer_part = ""
+        decimal_part = ""
+
+        if len(result) == 0:
+            integer_part = "0."
+        else:
+            result.append(".")
+            for digit in result:
+                integer_part+= str(digit)
+            
+        if len(result_decimal) == 0:
+            decimal_part = "0"
+        else:
+            for digit in result_decimal:
+                decimal_part += str(digit)
+
+        
+            
+        whole_number = integer_part + decimal_part
+
+        
+
+
+
+        return whole_number
     
 
-    elif source_base == 2 and target_base == 16: #binary to hex
+    elif source_base == 2 and target_base == 16: #binary to hex-----------------------------------------------------------------------------------------------------
         #first binary to decimal
         num = []
         for digit in str(input_number):
@@ -184,7 +409,63 @@ def convert_number(input_number,source_base,target_base):
             if result[i]>9:
                 result[i] = alpha[result[i]]
         
-        return result
+
+
+        #fraction
+        num = []
+        sum_fraction = 0
+        for digit in str(decimal_number):
+            num.append(int(digit))
+        
+        for i in range(0,len(num)):
+            sum_fraction+= (num[i])*2**(-(i+1))
+        
+        counter = 0
+        decimal_number = sum_fraction
+        result_decimal = []
+
+        while(decimal_number!=0.0) and (counter < 5):
+            
+            decimal_number = decimal_number*16
+            carry = int(decimal_number)
+            result_decimal.append(carry)
+
+            decimal_number = decimal_number - carry
+            counter+=1
+        
+        for i in range(0,len(result_decimal)):
+            if result_decimal[i] >9:
+                result_decimal[i] = alpha[result_decimal[i]]
+        
+
+        integer_part = ""
+        decimal_part = ""
+
+        if len(result) == 0:
+            integer_part = "0."
+        else:
+            result.append(".")
+            for digit in result:
+                integer_part+= str(digit)
+            
+        if len(result_decimal) == 0:
+            decimal_part = "0"
+        else:
+            for digit in result_decimal:
+                decimal_part += str(digit)
+
+        
+            
+        whole_number = integer_part + decimal_part
+
+
+        
+
+
+        
+
+        
+        return whole_number
 
 
 
@@ -225,7 +506,7 @@ print("\n This progam will easily convert betwwen Deicmal, Binary and Hexadecima
 print("\n Please enter the following inputs: ")
 
 
-print(convert_number(10101011,2,16))
+print(convert_number(0.0001,2,16))
 
 
 '''
