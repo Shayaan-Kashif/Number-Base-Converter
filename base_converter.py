@@ -61,9 +61,13 @@ def to_binary(input_number, source_base, target_base):
 
             max_index = len(comp1)-1 #finding the max index number of the list
 
+
             while(max_index >= 0): #Startting from the max index which is the element on the far right and checking if it is a 0 if so then we swap to 1n and break the loop else we contiunue till we find one
 
-                if(comp1[max_index]== "0"):
+                if(comp1[max_index]== "1"):
+                    comp1[max_index] = "0"
+                    
+                elif(comp1[max_index]=="0"):
                     comp1[max_index] = "1"
                     break
 
@@ -77,7 +81,7 @@ def to_binary(input_number, source_base, target_base):
 
             return result #The result is returned 
             
-
+        #If the number is positive
         else:
             for num in result_list:
                 result += num #Iterating over the correct order list and storing the result as a single string in result 
@@ -95,7 +99,7 @@ def to_binary(input_number, source_base, target_base):
             hex = hex_to_binary_replacement[hex] #For each value in the users list it is mapped to its binary value 
             result += hex # the mapped value is joined into a string
         
-        return result #The result is returned 
+        return result #The binary result is returned  
     
     
 
