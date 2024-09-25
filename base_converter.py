@@ -32,12 +32,33 @@ def ValidateInput(input_number, source_base):
 
 def to_binary(input_number, source_base, target_base):
     try:
-        input_number = float(input_number) #Convert to integer and if successful then we continue 
+        input_number_list = list(input_number) #keeps a list of the number in case of fractional
+        input_number = int(float(input_number)) #Convert to integer and if successful then we continue 
         result_list = [] #Empty list to store the values of the result but will be backwrds
         comp1 = [] #First compliments empty list
         result = "" #Empty string to store the final result in the correct order
         bin_replacement = {'1': '0', '0':'1','1.0':'0','0.0':'1'} # Dictionary to change binary values for the 1st compliment
         negative = False #Variable to check if we have a negative number initialized to false
+        fractional_check = input_number_list.count(".") #checks for a dot which will trigger a fraction operation
+        fractional_binary = ""
+
+        if(fractional_check == 1):
+            #gets the location of the dot and keeps only fractional part
+            dot_index = input_number_list.index(".")
+            fractional_part = input_number_list[dot_index :]
+            fractional_part = float("0" + "".join(fractional_part))
+            counter = 0
+            while (counter < 5 and fractional_part != 0):
+                complete_new_fraction = fractional_part * 2
+                fractional_binary += str(int(complete_new_fraction))
+                complete_new_fraction_list = list(str(complete_new_fraction))
+                complete_new_fraction_list[0] = "0"
+                fractional_part = float("".join(complete_new_fraction_list))
+                counter += 1
+
+            print(fractional_binary)
+
+
         
         #Checks if the number is negative
         if(input_number < 0):
@@ -78,15 +99,13 @@ def to_binary(input_number, source_base, target_base):
             for num in comp1:
                 result += num #Joining into a string 
 
-
-            return result #The result is returned 
             
         #If the number is positive
         else:
             for num in result_list:
                 result += num #Iterating over the correct order list and storing the result as a single string in result 
 
-            return result #The result is returned 
+        return result + "." + fractional_binary  #The result is returned 
 
 
     except(ValueError):
