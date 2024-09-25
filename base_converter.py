@@ -32,34 +32,21 @@ def ValidateInput(input_number, source_base):
 
 def to_binary(input_number, source_base, target_base):
     try:
-        input_number_list = list(input_number) #keeps a list of the number in case of fractional
-        input_number = int(float(input_number)) #Convert to integer and if successful then we continue 
+        input_number = float(input_number) #Convert to integer and if successful then we continue 
         result_list = [] #Empty list to store the values of the result but will be backwrds
         comp1 = [] #First compliments empty list
         result = "" #Empty string to store the final result in the correct order
         bin_replacement = {'1': '0', '0':'1','1.0':'0','0.0':'1'} # Dictionary to change binary values for the 1st compliment
         negative = False #Variable to check if we have a negative number initialized to false
-        fractional_check = input_number_list.count(".") #checks for a dot which will trigger a fraction operation
-        fractional_binary = ""
-
-        if(fractional_check == 1):
-            #gets the location of the dot and keeps only fractional part
-            dot_index = input_number_list.index(".")
-            fractional_part = input_number_list[dot_index :]
-            fractional_part = float("0" + "".join(fractional_part))
-            counter = 0 #counts only up to 5 as it is the requested accuracy
-            while (counter < 5 and fractional_part != 0):
-                complete_new_fraction = fractional_part * 2 #gets a new number, whole part will be added to fractional_binary string and fractional part goes back into loop
-                fractional_binary += str(int(complete_new_fraction))
-                complete_new_fraction_list = list(str(complete_new_fraction)) #cast to a list for manipulation
-                complete_new_fraction_list[0] = "0" #makes sure first digit is a 0
-                fractional_part = float("".join(complete_new_fraction_list))
-                counter += 1
         
         #Checks if the number is negative
         if(input_number < 0):
             negative = True
             input_number = input_number * -1
+
+        #Fixes edge case where a user enters the number 0 from decimal or hex to to be converted to binary
+        if(input_number == 0 and source_base == "10" or source_base == "16"):
+            return("0")
         
 
         while(input_number != 0): 
@@ -95,18 +82,20 @@ def to_binary(input_number, source_base, target_base):
             for num in comp1:
                 result += num #Joining into a string 
 
+            result = str(int(result))
+            return result #The result is returned 
             
         #If the number is positive
         else:
             for num in result_list:
                 result += num #Iterating over the correct order list and storing the result as a single string in result 
 
-        return result + "." + fractional_binary  #The result is returned 
+            return result #The result is returned 
 
 
     except(ValueError):
         hex_to_binary_replacement = {'0':'0000','1':'0001','2':'0010','3':'0011','4':'0100','5':'0101','6':'0110','7':'0111','8':'1000','9':'1001',
-                                        'A': '1010', 'B': '1011', 'C': '1100','D':'1101','E':'1110','F':'1111', '.':'.'} #Dictionary to map the hex values to their corresponding binary values
+                                        'A': '1010', 'B': '1011', 'C': '1100','D':'1101','E':'1110','F':'1111'} #Dictionary to map the hex values to their corresponding binary values
         hex_list = list(input_number) # Turning the users input into a list
         result = "" #Empty string to store the result 
 
@@ -116,15 +105,60 @@ def to_binary(input_number, source_base, target_base):
         
         return result #The binary result is returned  
     
-    
 
+def fractional_to_binary(fractional_num, fractional_length):
+    fractional_lst = []
+    iteration = fractional_length
+
+    while(iteration != 0):
+        fractional_num = str(fractional_num * 2)
+        fractional_lst.append(fractional_num[0])
+
+        if(fractional_num[0] == "1"):
+            fractional_num = list(fractional_num)
+            fractional_num[0] = "0"
+            fractional_num = "".join(fractional_num)
+
+        fractional_num = float(fractional_num)
+        iteration -= 1
+    
+    result = "".join(fractional_lst)
+    return result
+        
 
 def convert_number(input_number,source_base,target_base):
-
     #If the user wishes to convert from either decimal or hex to binary 
     if(target_base == "2"):
-        result = to_binary(input_number,source_base,target_base) #calling the to binary funtion to convert the number to binary
-        return result #returning the result 
+        num_list = list(input_number) #Listing the users input so it can be checked for fractional or not
+        fractional_check = num_list.count(".") #Finding if we have a fractional number or not
+
+        if(fractional_check == 1):
+            dot_index = num_list.index(".") #Getting the index of where the decinal is in the list of the users input
+            whole_num = num_list[:dot_index] #To store the whole number if a floating point is entered
+            fractional_num = num_list[(dot_index):] #To store the fractional part if a floating point is entered inclduing the decimal
+
+
+            fractional_length = len(fractional_num)-1 #Subtracting 1 as teh decimal will count towards the length which we do not want
+            fractional_num.insert(0,'0') #Inserting a 0 at the start of the list to make it easy to cast to float
+
+
+            whole_num = "".join(whole_num) #Joining the list elements of the whole number 
+            fractional_num = "".join(fractional_num) #Joining the list elements of the fractional part
+            fractional_num = float(fractional_num) #Casting the fractional part to float 
+
+
+            whole_num = to_binary(whole_num, source_base, target_base)
+            fractional_num = fractional_to_binary(fractional_num, fractional_length)
+
+
+            result = whole_num +"."+ fractional_num #Joining the result of the whole number and fractional
+
+            return(result) #Returning the result 
+
+        else:
+            result = to_binary(input_number,source_base,target_base) #calling the to binary function to convert the number to binary
+            result = str(int(float(result)))
+            return result #returning the result 
 
 
     if(target_base == "10"): #If the user wants to convert to decimal 
