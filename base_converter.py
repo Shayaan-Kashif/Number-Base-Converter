@@ -158,7 +158,6 @@ def convert_number(input_number,source_base,target_base):
         hex_replacement = {'A': 10, 'B': 11, 'C': 12,'D':13,'E':14,'F':15} # Dictionary to map hex values
         result1 = 0 # Variable to store result
         result2 = 0
-        result =""
       
 
         if(fractional_check == 1):
@@ -201,11 +200,12 @@ def convert_number(input_number,source_base,target_base):
         
         #If input num is not a floating-point number
         else:
+            result = 0
             for num in num_list:
                 if(num in hex_replacement):
                     num = hex_replacement[num] # If the character being iterated over is a hex letter it is mapped to its number value
-
-                result += float(num) * math.pow(int(source_base), iteration) # Converstion from binary to decimal or Hex to decimal
+            
+                result += int(float(num) * math.pow(int(source_base), iteration)) # Converstion from binary to decimal or Hex to decimal
                 iteration -= 1 #Subtracting by one as the code is solving it from left to right
 
             return result #The result is returned 
