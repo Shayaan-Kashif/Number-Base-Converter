@@ -201,7 +201,7 @@ def convert_number(input_number,source_base,target_base):
         binary_to_hex_replacement = {'0000': '0', '0001': '1', '0010': '2', '0011': '3', '0100': '4', '0101': '5', '0110': '6', '0111': '7', '1000': '8', '1001': '9', 
                                      '1010': 'A', '1011': 'B', '1100': 'C', '1101': 'D', '1110': 'E', '1111': 'F'}
         fractional_check = input_number.count(".")
-        fractional_hex = "0"
+        fractional_hex = "0" #sets 0 as a placeholder incase no fractional is given
 
         if(input_number[0]=="-"): #Checking if the first character is a "-" which means the input is negative 
             input_number = input_number_backup #getting the original users input and re assigning to input_value
@@ -210,44 +210,45 @@ def convert_number(input_number,source_base,target_base):
             length_of_list = len(input_number) #finding the new length of the list
             adjusted_source_base = True # Setting the adjusted base to true since the users original source base was 10
         
+        if (fractional_check == 1): #checks if the number contains a decimal point
+            input_number_binary = input_number #makes a backup of the original number
+            dot_index = input_number.index(".") #get index of dot to split number
+            input_number_backup = "".join(input_number[:dot_index]) #get the whole part without fraction for the decimal part of the program to manage
+            length_of_list = len(input_number[:dot_index])  #gets new length since we removed the fractional part
+            input_number = input_number[:dot_index] #new list without dot or fractional part for the binary part to manage
+            if (source_base == "10" and adjusted_source_base == False): #if source base is 10, convert to binary to make managing easier
+                input_number_binary = to_binary("".join(input_number_binary), source_base, 2)
+            input_number_binary = list(input_number_binary) #turns string back into list
+            dot_index = input_number_binary.index(".") #gets new dot index of binary number
+            fractional_part = input_number_binary[(dot_index + 1) :] #get the fractional part
+            length_of_fractional_part = len(fractional_part) #length of fractional part for padding
+            fractional_hex = ""
+            placeholder = ""
+            zero_add = 0
+
+            if (length_of_fractional_part % 4 == 1): #add zeros depending on modulo, explanation in paragraph below
+                zero_add = 3
+            elif (length_of_fractional_part % 4 == 2):
+                zero_add = 2
+            elif (length_of_fractional_part % 4 == 3):
+                zero_add = 1
+
+
+            while(zero_add != 0): #adds required zeros to split into proper hex
+                    fractional_part.append("0")
+                    zero_add -= 1
+
+            count = 0
+            for num in fractional_part: #groups 4 bits together and then converts them to binary
+                placeholder += num
+                count += 1
+                if (count == 4):
+                    fractional_hex += binary_to_hex_replacement[placeholder]
+                    count = 0
+                    placeholder = ""
+        
         #If the users source base is 2 or if the adjusted base is true the following code will execute 
         if(source_base == "2" or adjusted_source_base == True):
-
-            if (fractional_check == 1):
-                dot_index = input_number.index(".")
-                fractional_part = input_number[(dot_index + 1) :]
-                input_number = input_number[:dot_index]
-                length_of_list = len(input_number)
-                length_of_fractional_part = len(fractional_part)
-                fractional_hex = ""
-                placeholder = ""
-                zero_add = 0
-
-                if (length_of_fractional_part % 4 == 1):
-                    zero_add = 3
-                elif (length_of_fractional_part % 4 == 2):
-                    zero_add = 2
-                elif (length_of_fractional_part % 4 == 3):
-                    zero_add = 1
-
-
-                while(zero_add != 0):
-                        fractional_part.append("0")
-                        zero_add -= 1
-
-                count = 0
-                for num in fractional_part:
-                    placeholder += num
-                    count += 1
-                    if (count == 4):
-                        fractional_hex += binary_to_hex_replacement[placeholder]
-                        count = 0
-                        placeholder = ""
-
-                    print(fractional_hex)
-
-
-
             """
             The code below checks to see if the binary numb er can be broken down into groups of 4 bits. 
             If it cannot then it will find the remainder. The remandier value will be 0 if it can be broken down into 
@@ -338,7 +339,7 @@ def convert_number(input_number,source_base,target_base):
                 
                 result += num # Adding the string value of num into the result 
             
-            return result #Returning the result 
+            return result + "." + fractional_hex #Returning the result 
 
 
 
