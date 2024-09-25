@@ -114,18 +114,62 @@ def convert_number(input_number,source_base,target_base):
 
     if(target_base == "10"): #If the user wants to convert to decimal 
         num_list = list(input_number) #Split the user input into a list
+        fractional_check = num_list.count(".")
         iteration = len(num_list) - 1 # This is the power the source base will be raised to 
         hex_replacement = {'A': 10, 'B': 11, 'C': 12,'D':13,'E':14,'F':15} # Dictionary to map hex values
-        result = 0 # Variable to store result
+        result1 = 0 # Variable to store result
+        result2 = 0
+        result =""
+      
 
-        for num in num_list:
-            if(num in hex_replacement):
-                num = hex_replacement[num] # If the character being iterated over is a hex letter it is mapped to its number value
+        if(fractional_check == 1):
+            dot_index = num_list.index(".")
 
-            result += float(num) * math.pow(int(source_base), iteration) # Converstion from binary to decimal or Hex to decimal
-            iteration -= 1 #Subtracting by one as the code is solving it from left to right
+            whole_num = num_list[:dot_index] #To store the whole number if a floating point is entered
+            fractional_num = num_list[(dot_index + 1):] #To store the fractional part if a floating point is entered
 
-        return result #The result is returned 
+            print(whole_num)
+            print(fractional_num)
+
+            iteration = len(whole_num)-1
+
+            for num in whole_num:
+                if(num in hex_replacement):
+                    num = hex_replacement[num] # If the character being iterated over is a hex letter it is mapped to its number value
+
+                result1 += float(num) * math.pow(int(source_base), iteration) # Converstion from binary to decimal or Hex to decimal
+                iteration -= 1 #Subtracting by one as the code is solving it from left to right
+
+            result1 = str(result1)
+
+            result1 = result1[:len(result1)-2]
+
+
+            iteration = -1
+            for num in fractional_num:
+                if(num in hex_replacement):
+                    num = hex_replacement[num] # If the character being iterated over is a hex letter it is mapped to its number value
+
+                result2 += float(num) * math.pow(int(source_base), iteration) # Converstion from binary to decimal or Hex to decimal
+                iteration -= 1 #Subtracting by one as the code is solving it from left to right
+
+            result2 = str(result2)
+            result2 = result2[2:]
+
+            result = result1+"."+result2
+
+            return result
+        
+        #If input num is not a floating-point number
+        else:
+            for num in num_list:
+                if(num in hex_replacement):
+                    num = hex_replacement[num] # If the character being iterated over is a hex letter it is mapped to its number value
+
+                result += float(num) * math.pow(int(source_base), iteration) # Converstion from binary to decimal or Hex to decimal
+                iteration -= 1 #Subtracting by one as the code is solving it from left to right
+
+            return result #The result is returned 
     
     #If the user wishes to convert to hex
     if(target_base == "16"):
