@@ -220,7 +220,7 @@ def convert_number(input_number,source_base,target_base):
         binary_to_hex_replacement = {'0000': '0', '0001': '1', '0010': '2', '0011': '3', '0100': '4', '0101': '5', '0110': '6', '0111': '7', '1000': '8', '1001': '9', 
                                      '1010': 'A', '1011': 'B', '1100': 'C', '1101': 'D', '1110': 'E', '1111': 'F'}
         fractional_check = input_number.count(".")
-        fractional_hex = "0" #sets 0 as a placeholder incase no fractional is given
+        fractional_hex = "" #sets blank as a placeholder incase no fractional is given
 
         if(input_number[0]=="-"): #Checking if the first character is a "-" which means the input is negative 
             input_number = input_number_backup #getting the original users input and re assigning to input_value
@@ -241,7 +241,6 @@ def convert_number(input_number,source_base,target_base):
             dot_index = input_number_binary.index(".") #gets new dot index of binary number
             fractional_part = input_number_binary[(dot_index + 1) :] #get the fractional part
             length_of_fractional_part = len(fractional_part) #length of fractional part for padding
-            fractional_hex = ""
             placeholder = ""
             zero_add = 0
 
@@ -329,8 +328,13 @@ def convert_number(input_number,source_base,target_base):
                     count = -1
 
                 count += 1
-        
-            return result + "." + fractional_hex #Returning the result
+
+            if (fractional_hex != ""):
+                return result + "." + fractional_hex #Returning the result
+            else:
+                return result
+
+            
 
 
         else: #Handles conversions of base 10 to base 16
@@ -345,8 +349,6 @@ def convert_number(input_number,source_base,target_base):
                 rem = input_number%16 # Getting the remanider and storing it in rem
                 result_list.append(str(rem)) # Storing the remainder as a string in the result list
                 input_number = math.floor(input_number/16) #Dividing the number by 2 and flooring it to ensure there are no decimals
-                print("Current rem:", rem)
-                print("Current input number:", input_number) 
 
             result_list = result_list[::-1] #Reversing the list
 
@@ -360,7 +362,10 @@ def convert_number(input_number,source_base,target_base):
                 
                 result += num # Adding the string value of num into the result 
             
-            return result + "." + fractional_hex #Returning the result 
+            if (fractional_hex != ""):
+                return result + "." + fractional_hex #Returning the result
+            else:
+                return result   
 
 
 
