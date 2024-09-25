@@ -47,18 +47,14 @@ def to_binary(input_number, source_base, target_base):
             dot_index = input_number_list.index(".")
             fractional_part = input_number_list[dot_index :]
             fractional_part = float("0" + "".join(fractional_part))
-            counter = 0
+            counter = 0 #counts only up to 5 as it is the requested accuracy
             while (counter < 5 and fractional_part != 0):
-                complete_new_fraction = fractional_part * 2
+                complete_new_fraction = fractional_part * 2 #gets a new number, whole part will be added to fractional_binary string and fractional part goes back into loop
                 fractional_binary += str(int(complete_new_fraction))
-                complete_new_fraction_list = list(str(complete_new_fraction))
-                complete_new_fraction_list[0] = "0"
+                complete_new_fraction_list = list(str(complete_new_fraction)) #cast to a list for manipulation
+                complete_new_fraction_list[0] = "0" #makes sure first digit is a 0
                 fractional_part = float("".join(complete_new_fraction_list))
                 counter += 1
-
-            print(fractional_binary)
-
-
         
         #Checks if the number is negative
         if(input_number < 0):
