@@ -40,7 +40,7 @@ def to_binary(input_number, source_base, target_base):
         bin_replacement = {'1': '0', '0':'1','1.0':'0','0.0':'1'} # Dictionary to change binary values for the 1st compliment
         negative = False #Variable to check if we have a negative number initialized to false
         fractional_check = input_number_list.count(".") #checks for a dot which will trigger a fraction operation
-        fractional_binary = ""
+        fractional_binary = "0"
 
         if(fractional_check == 1):
             #gets the location of the dot and keeps only fractional part
@@ -48,13 +48,16 @@ def to_binary(input_number, source_base, target_base):
             fractional_part = input_number_list[dot_index :]
             fractional_part = float("0" + "".join(fractional_part))
             counter = 0 #counts only up to 5 as it is the requested accuracy
-            while (counter < 5 and fractional_part != 0):
+            fractional_binary = ""
+            while (True):
                 complete_new_fraction = fractional_part * 2 #gets a new number, whole part will be added to fractional_binary string and fractional part goes back into loop
                 fractional_binary += str(int(complete_new_fraction))
                 complete_new_fraction_list = list(str(complete_new_fraction)) #cast to a list for manipulation
                 complete_new_fraction_list[0] = "0" #makes sure first digit is a 0
                 fractional_part = float("".join(complete_new_fraction_list))
                 counter += 1
+                if (counter > 4 or fractional_part == 0):
+                    break
         
         #Checks if the number is negative
         if(input_number < 0):
@@ -62,10 +65,12 @@ def to_binary(input_number, source_base, target_base):
             input_number = input_number * -1
         
 
-        while(input_number != 0): 
+        while(True): 
             rem = input_number%2 # Getting the remanider and storing it in rem
             result_list.append(str(rem)) # Storing the remainder as a string in the result list
             input_number = math.floor(input_number/2) #Dividing the number by 2 and flooring it to ensure there are no decimals 
+            if (input_number == 0):
+                break
 
 
         result_list = result_list[::-1] # Reversing the order of the list
