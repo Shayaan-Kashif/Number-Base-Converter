@@ -40,7 +40,7 @@ def to_binary(input_number, source_base, target_base):
         bin_replacement = {'1': '0', '0':'1','1.0':'0','0.0':'1'} # Dictionary to change binary values for the 1st compliment
         negative = False #Variable to check if we have a negative number initialized to false
         fractional_check = input_number_list.count(".") #checks for a dot which will trigger a fraction operation
-        fractional_binary = "0"
+        fractional_binary = ""
 
         if(fractional_check == 1):
             #gets the location of the dot and keeps only fractional part
@@ -77,6 +77,18 @@ def to_binary(input_number, source_base, target_base):
 
 
         if(negative == True): #if we have a negative number
+            result = "" #stores final result of calculations
+
+            if (len(result_list) < 8): #makes the current number 8 bits for 2's compliment
+                while(len(result_list) != 8):
+                    result_list.insert(0, "0")
+            elif (len(result_list) < 16): #makes the number 16 bit if bigger than 8 bits for 2's compliment.
+                while(len(result_list) != 16): 
+                    result_list.insert(0, "0")
+            else: #if bigger, 2's compliment will be of integer size in + 1
+                result = "1" #negative numbers always start with 1, when bigger then 16, just add 1
+
+            result_list = result_list + list(fractional_binary) #adds fracional part to be added if applicable
             for num in result_list:
                 num = bin_replacement[num] #Going through each element and swaping the 0 with 1 and 1 wiht 0 for the first compliment 
                 comp1.append(num)
@@ -96,17 +108,24 @@ def to_binary(input_number, source_base, target_base):
                 max_index -= 1 # Decreasing so we can move through the elements from right to left
 
             
-            result = "1" #negative numbers always start with 1
+            if (fractional_binary != ""):
+                dot_index = len(comp1) - len(fractional_binary)
+                comp1.insert(dot_index, ".")
+
             for num in comp1:
                 result += num #Joining into a string 
+            return result  #The result is returned 
 
             
         #If the number is positive
         else:
             for num in result_list:
                 result += num #Iterating over the correct order list and storing the result as a single string in result 
-
-        return result + "." + fractional_binary  #The result is returned 
+            if (fractional_binary !=""):
+                return result + "." + fractional_binary #The result is returned
+            else:
+                return result 
+              
 
 
     else:
