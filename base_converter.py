@@ -2,10 +2,10 @@ import math
 
 def ValidateInput(input_number, source_base):
     #Checks base and assigns valid digits depending on said base
-    if (source_base == "2"):
-        validDigits = ("0", "1")
+    if (source_base == 2):
+        validDigits = ("0", "1" , ".")
     
-    elif (source_base == "10"):
+    elif (source_base == 10):
         try:
             float(input_number)
 
@@ -15,8 +15,8 @@ def ValidateInput(input_number, source_base):
         return True
             
     
-    elif (source_base == "16"):
-        validDigits = ("0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "A", "B", "C", "D", "E", "F")
+    elif (source_base == 16):
+        validDigits = ("0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "A", "B", "C", "D", "E", "F", ".")
     
     #this is to handle invalid base input, can be modified as error will not notify the user of this specific case
     else:
@@ -33,21 +33,32 @@ def convert_number(input_number,source_base,target_base):
     result_decimal = [] #for decimal
 
 
-
-    try:
+#since python has approximation with floating points, i will need to make binary as string value which should be the default of an input, note make decimal cast to float
+    if source_base == 10:
+        temp = float(input_number)
+        input_number = temp
         input_number/=1 #make sure that it has decimal, whethir it be a whole number or not: ex 5 will become 5.0
-        whole_number = str(input_number).split(".")
-        input_number = int(whole_number[0])
-        decimal_number = int(whole_number[1])
-       
+        whole_number = math.modf(input_number)
+        input_number = int(whole_number[1])
+        decimal_number = (whole_number[0])
     
-    except Exception as e: #for hex
+    else:
         whole_number = str(input_number).split(".")
         input_number = str(whole_number[0])
         if len(whole_number) == 1:
-            decimal_number = "0"
+            decimal_number = "0" 
         else:
             decimal_number = str(whole_number[1])
+        
+        
+    
+    
+    
+    
+    
+    
+    
+   
 
     
 
@@ -63,9 +74,7 @@ def convert_number(input_number,source_base,target_base):
 
         #fraction
 
-        tens = len(str(decimal_number))
-        
-        decimal_number = int(decimal_number)/(10**tens)
+       
 
         counter = 0
         while(decimal_number!=0.0) and (counter < 5):
@@ -145,9 +154,7 @@ def convert_number(input_number,source_base,target_base):
         #fraction
         
 
-        tens = len(str(decimal_number))
-        
-        decimal_number = decimal_number/(10**tens)
+       
 
         counter = 0
         while(decimal_number!=0.0) and (counter < 5):
@@ -205,18 +212,20 @@ def convert_number(input_number,source_base,target_base):
     
     elif source_base == 2 and target_base == 10: # binary to decimal
         num = []
-        for digit in str(input_number):
-            num.append(digit)
+        for digit in input_number:
+            num.append(int(digit))
         
         num.reverse()
         sum = 0
 
         for i in range(0,len(num)):
-            sum+= int(num[i])*2**i
+            sum+= (num[i])*2**i
         
 
         #for fraction
         sum_fraction = 0
+
+        
 
         num_fraction = []
         for digit in decimal_number:
@@ -374,14 +383,15 @@ def convert_number(input_number,source_base,target_base):
     elif source_base == 2 and target_base == 16: #binary to hex-----------------------------------------------------------------------------------------------------
         #first binary to decimal
         num = []
-        for digit in str(input_number):
-            num.append(digit)
+        for digit in (input_number):
+            num.append(int(digit))
         
         num.reverse()
         sum = 0
+       
 
         for i in range(0,len(num)):
-            sum+= int(num[i])*2**i
+            sum+= (num[i])*2**i
         
         input_number = sum
         
@@ -414,8 +424,12 @@ def convert_number(input_number,source_base,target_base):
         #fraction
         num = []
         sum_fraction = 0
-        for digit in str(decimal_number):
+        
+
+             
+        for digit in decimal_number:
             num.append(int(digit))
+        
         
         for i in range(0,len(num)):
             sum_fraction+= (num[i])*2**(-(i+1))
@@ -506,51 +520,71 @@ print("\n This progam will easily convert betwwen Deicmal, Binary and Hexadecima
 print("\n Please enter the following inputs: ")
 
 
-print(convert_number(0.0001,2,16))
 
 
-'''
+keepGoing = True
 
-continue_choice = True
+while(keepGoing):
+
+    invalidInput = True
+    while(invalidInput):
+        source = input("The source base (i.e., the base to convert from 10, 2 or 16): ")
+        if source != "10" and source != "2" and source != "16":
+            print("Invalid input, please try again")
+        else:
+            invalidInput = False
+            source_base = int(source)
+    
+    invalidInput = True
+    while(invalidInput):
+        target = input("The target base (i.e., the base to convert to ): ")
+        if target != "10" and target!= "2" and target!= "16":
+            print("Invalid input, please try again")
+        else:
+            invalidInput = False
+            target_base = int(target)
+        
+    invalidInput = True
+    while(invalidInput):
+        number = input("The number to convert: ")
+        if(ValidateInput(number, source_base)):
+            invalidInput = False
+        
+        else:
+            print("Invalid input, it has to be the base of " , source_base, ". Please try again")
+    
+    output = convert_number(number,source_base,target_base)
+
+    print("The result of converting the number: ", number, " from the base ", source_base , " to base ", target_base, " is: \n" , output)
+
+    invalidInput = True
+    while(invalidInput):
+        WantToStay = input("Do you wish to continue with other numbers? \nEnter (Y) to continue \nEnter (N) to quit\n")
+        if WantToStay!= "Y" and WantToStay!= "N":
+            print("invalid input, please try again")
+        
+        else:
+            invalidInput = False
+            if WantToStay == "N":
+                keepGoing = False
+                print("Quitting calculator ... Thank you!")
 
 
-while(continue_choice != False):
-
-    input_number = input("\nThe number to convert: ")
-    source_base = input("\ni.e, the base to convert from: ") #string
-    target_base = input("\ni,e, the base to convert to: ") #string
-
-    Validated = ValidateInput(input_number, source_base) #Will return true or false depending on if the input is validated
-
-    if(Validated == True):
-        print("\nInput Number Was Validated\n")
-        converted_num = convert_number(input_number,source_base,target_base)
-        print("\nThe result is:",converted_num)
-
-    else:
-        print("\nThe input",input_number,"was not a valid input for base",source_base+".","Please enter a valid number.\n")
-
-
-    print("\nDo you wish to contuinue with other numbers? ")
-    print("Enter (Y) to contiue")
-    print("Enter (N to quit)")
-
-
-    wish_to_continue = input("\nYour Choice: ")
-
-    if(wish_to_continue == "Y"):
-        pass #do nothing as the continue_choice variable is already set to true
-
-    else:
-        continue_choice = False
-
-
-print("\nQuitting calculator... Thank you!!!\n")
 
 
 
-'''
- 
+
+
+
+    
+
+    
+
+        
+            
+
+
+
 
 
 
