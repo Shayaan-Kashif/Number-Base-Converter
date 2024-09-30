@@ -166,9 +166,6 @@ def convert_number(input_number,source_base,target_base):
             whole_num = num_list[:dot_index] #To store the whole number if a floating point is entered
             fractional_num = num_list[(dot_index + 1):] #To store the fractional part if a floating point is entered
 
-            print(whole_num)
-            print(fractional_num)
-
             iteration = len(whole_num)-1
 
             for num in whole_num:
