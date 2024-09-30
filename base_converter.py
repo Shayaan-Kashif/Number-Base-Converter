@@ -371,7 +371,7 @@ def convert_number(input_number,source_base,target_base):
                 return result   
 
 
-
+#Writing some instructions to the user
 print("\n----Number Base Converter---")
 print("\nThis progam will easily convert between Deicmal, Binary and Hexadecimal numbers.")
 print("\nInstructions:\n1. Enter the number you'd like to convert\n2. Enter the base you would like to convert from\n3. Enter the base you want to convert to\n4. You can exit anytime by entering the command \"-Exit\" or by entering \"N\" after a conversion")
@@ -382,63 +382,75 @@ continue_choice = True
 exit_choice = False
 
 
-
+#Main loop to run the program
 while(continue_choice != False or exit_choice == True):
 
-    choice_left = ["2","10","16"]
+    choice_left = ["2","10","16"] #A list of choices for the user 
 
-    input_number = input("\nPlease enter the number to convert: ")
+    input_number = input("\nPlease enter the number to convert: ") #Asking for the users input
 
-    input_test = list(input_number)
+    input_test = list(input_number) #Converting the users input intp a lists
 
+    #Checking if the users input is only blank spaces
     while(input_test.count(" ") == len(input_test)):
         print("\nYou cannot convert nothing. Please enter a number to convert.")
         input_number = input("\nPlease enter the number to convert: ")
         input_test = list(input_number)
-
+    
+    #CHecking to see if the user wants to exit
     if(input_number == "-Exit"):
         exit_choice == True
         break
 
-    source_base = input("\nPlease enter the base to convert from: ")
+    source_base = input("\nPlease enter the base to convert from: ") #Asking for the source base
 
+    #Checking to see if the user wants to exit
     if(source_base == "-Exit"):
         exit_choice == True
         break
 
+    #Checking to see if the user entered a valid source base
     while(source_base != "2" and source_base !="10" and source_base != "16"):
         print("We do not support converting from that base.")
         source_base = input("\nPlease enter the base to convert from: ")
 
-    
+    #Checking if the users input is valid for the source based selected
     Validated = ValidateInput(input_number, source_base) #Will return true or false depending on if the input is validated
 
+    #If the user did not enter a valid input. The program will ask them repeatedly to enter a valid number for the base they chose
     while(Validated == False or input_number == " -Exit"):
         print("\nThe input",input_number,"was not a valid input for base",source_base+".","Please enter a valid number.\n")
         input_number = input("\nPlease enter another valid number to convert to: ")
 
+        #Checking to see if the user wants to exit
         if(input_number == "-Exit"):
             exit_choice == True
             break
 
         Validated = ValidateInput(input_number, source_base) #Will return true or false depending on if the input is validated
-       
+   
+    #Checking to see if the user wants to exit
     if(input_number == "-Exit"):
         exit_choice == True
         break
 
     target_base = input("\nPlease enter the base to convert to: ")
+    
+    #Checking to see if the user wants to exit
     if(target_base == "-Exit"):
         exit_choice == True
         break
 
    
     
-    index = choice_left.index(source_base)
+    index = choice_left.index(source_base) #Finding the index of the source base in the list
 
-    choice_left.pop(index)
+    choice_left.pop(index) #Removing it from the list leaving the remaining bases for the user to convert to
 
+    #If the users entered target base is not int he list of avalible bases left then the loop is triggered 
     while(target_base not in choice_left):
+
+        #Checking if the user entered the same target base as the source base
         while(target_base == source_base):
             print("You cannot convert between same bases As there is no change from the input number.")
             print("You can pick between:",choice_left[0],"or",choice_left[1])
@@ -449,7 +461,7 @@ while(continue_choice != False or exit_choice == True):
                 break
 
 
-
+        #Checking if the user entered a unsupported target base
         if(target_base != source_base and target_base not in choice_left):
             print("target and source not equal")
             print("We do not convert to that base.")
@@ -462,17 +474,19 @@ while(continue_choice != False or exit_choice == True):
 
 
 
-    print("\nInput Number Was Validated\n")
-    converted_num = convert_number(input_number,source_base,target_base)
-    print("\nThe result is:",converted_num)
+    print("\nInput Number Was Validated\n") #Letting the user know the input number was valididated
+    converted_num = convert_number(input_number,source_base,target_base) #Calling the convert_number function to convert the number
+    print("\nThe result is:",converted_num) #Printing the result to the user
 
+    #Asking the user if they would like to continue 
     print("\nDo you wish to contuinue with other numbers? ")
     print("Enter (Y) to contiue")
     print("Enter (N to quit)")
 
 
-    wish_to_continue = input("\nYour Choice: ")
+    wish_to_continue = input("\nYour Choice: ") #Users choice will be stored here
 
+    #Checking if the user entered a valid choice
     while(wish_to_continue != "Y" and wish_to_continue != "y" and wish_to_continue != "N" and wish_to_continue != "n"):
         print("\nYou entered an invalid choice. Please try again.")
         print("\n\nDo you wish to contuinue with other numbers? ")
@@ -482,16 +496,17 @@ while(continue_choice != False or exit_choice == True):
         wish_to_continue = input("Your Choice: ")
 
 
-       
+    #If they which to continue do nothing 
     if(wish_to_continue == "Y" or wish_to_continue == "y"):
         pass #do nothing as the continue_choice variable is already set to true
 
+    #If they wish to stop then we set continue chocie to false 
     else:
         continue_choice = False
 
    
 
-
+#Letting the user know the program ended 
 print("\nQuitting calculator... Thank you!!!\n")
 
 
