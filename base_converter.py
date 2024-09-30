@@ -219,6 +219,9 @@ def convert_number(input_number,source_base,target_base):
         fractional_check = input_number.count(".")
         fractional_hex = "" #sets blank as a placeholder incase no fractional is given
 
+        if(input_number_backup == "0"):
+            return("0")
+
         if(input_number[0]=="-"): #Checking if the first character is a "-" which means the input is negative 
             input_number = input_number_backup #getting the original users input and re assigning to input_value
             input_number = to_binary(input_number, source_base, 2) #seding the negaive number to be converted to binary. THis will return the second compliment
@@ -385,6 +388,13 @@ while(continue_choice != False or exit_choice == True):
     choice_left = ["2","10","16"]
 
     input_number = input("\nPlease enter the number to convert: ")
+
+    input_test = list(input_number)
+
+    while(input_test.count(" ") == len(input_test)):
+        print("\nYou cannot convert nothing. Please enter a number to convert.")
+        input_number = input("\nPlease enter the number to convert: ")
+        input_test = list(input_number)
 
     if(input_number == "-Exit"):
         exit_choice == True
