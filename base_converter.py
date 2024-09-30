@@ -232,6 +232,7 @@ def convert_number(input_number,source_base,target_base):
             input_number_backup = "".join(input_number[:dot_index]) #get the whole part without fraction for the decimal part of the program to manage
             length_of_list = len(input_number[:dot_index])  #gets new length since we removed the fractional part
             input_number = input_number[:dot_index] #new list without dot or fractional part for the binary part to manage
+
             if (source_base == "10" and adjusted_source_base == False): #if source base is 10, convert to binary to make managing easier
                 input_number_binary = to_binary("".join(input_number_binary), source_base, 2)
             input_number_binary = list(input_number_binary) #turns string back into list
@@ -265,7 +266,7 @@ def convert_number(input_number,source_base,target_base):
         #If the users source base is 2 or if the adjusted base is true the following code will execute 
         if(source_base == "2" or adjusted_source_base == True):
             """
-            The code below checks to see if the binary numb er can be broken down into groups of 4 bits. 
+            The code below checks to see if the binary number can be broken down into groups of 4 bits. 
             If it cannot then it will find the remainder. The remandier value will be 0 if it can be broken down into 
             bits of 4. And it will be either 1,2 or 3 if the binary number cannot be broken into 4 bits. if the remandier is 1
             that means 2 numbers either 00 or 11 have to be added to the start of the list in order to ensure it can be broken into 
@@ -283,8 +284,10 @@ def convert_number(input_number,source_base,target_base):
                         count = -1
 
                     count += 1
-                
-                return result + "." + fractional_hex
+                if(fractional_check == 0):
+                    return result
+                else:
+                    return result + "." + fractional_hex
 
             elif(length_of_list % 4 == 1):
                 zero_add = 3
