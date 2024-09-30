@@ -31,7 +31,7 @@ def ValidateInput(input_number, source_base):
 
 
 def to_binary(input_number, source_base, target_base):
-    try:
+    if (source_base == "10"):
         input_number_list = list(input_number) #keeps a list of the number in case of fractional
         input_number = int(float(input_number)) #Convert to integer and if successful then we continue 
         result_list = [] #Empty list to store the values of the result but will be backwrds
@@ -40,7 +40,7 @@ def to_binary(input_number, source_base, target_base):
         bin_replacement = {'1': '0', '0':'1','1.0':'0','0.0':'1'} # Dictionary to change binary values for the 1st compliment
         negative = False #Variable to check if we have a negative number initialized to false
         fractional_check = input_number_list.count(".") #checks for a dot which will trigger a fraction operation
-        fractional_binary = "0"
+        fractional_binary = ""
 
         if(fractional_check == 1):
             #gets the location of the dot and keeps only fractional part
@@ -77,6 +77,18 @@ def to_binary(input_number, source_base, target_base):
 
 
         if(negative == True): #if we have a negative number
+            result = "" #stores final result of calculations
+
+            if (len(result_list) < 8): #makes the current number 8 bits for 2's compliment
+                while(len(result_list) != 8):
+                    result_list.insert(0, "0")
+            elif (len(result_list) < 16): #makes the number 16 bit if bigger than 8 bits for 2's compliment.
+                while(len(result_list) != 16): 
+                    result_list.insert(0, "0")
+            else: #if bigger, 2's compliment will be of integer size in + 1
+                result = "1" #negative numbers always start with 1, when bigger then 16, just add 1
+
+            result_list = result_list + list(fractional_binary) #adds fracional part to be added if applicable
             for num in result_list:
                 num = bin_replacement[num] #Going through each element and swaping the 0 with 1 and 1 wiht 0 for the first compliment 
                 comp1.append(num)
@@ -96,20 +108,27 @@ def to_binary(input_number, source_base, target_base):
                 max_index -= 1 # Decreasing so we can move through the elements from right to left
 
             
-            result = "1" #negative numbers always start with 1
+            if (fractional_binary != ""):
+                dot_index = len(comp1) - len(fractional_binary)
+                comp1.insert(dot_index, ".")
+
             for num in comp1:
                 result += num #Joining into a string 
+            return result  #The result is returned 
 
             
         #If the number is positive
         else:
             for num in result_list:
                 result += num #Iterating over the correct order list and storing the result as a single string in result 
+            if (fractional_binary !=""):
+                return result + "." + fractional_binary #The result is returned
+            else:
+                return result 
+              
 
-        return result + "." + fractional_binary  #The result is returned 
 
-
-    except(ValueError):
+    else:
         hex_to_binary_replacement = {'0':'0000','1':'0001','2':'0010','3':'0011','4':'0100','5':'0101','6':'0110','7':'0111','8':'1000','9':'1001',
                                         'A': '1010', 'B': '1011', 'C': '1100','D':'1101','E':'1110','F':'1111', '.':'.'} #Dictionary to map the hex values to their corresponding binary values
         hex_list = list(input_number) # Turning the users input into a list
@@ -139,7 +158,6 @@ def convert_number(input_number,source_base,target_base):
         hex_replacement = {'A': 10, 'B': 11, 'C': 12,'D':13,'E':14,'F':15} # Dictionary to map hex values
         result1 = 0 # Variable to store result
         result2 = 0
-        result =""
       
 
         if(fractional_check == 1):
@@ -147,9 +165,6 @@ def convert_number(input_number,source_base,target_base):
 
             whole_num = num_list[:dot_index] #To store the whole number if a floating point is entered
             fractional_num = num_list[(dot_index + 1):] #To store the fractional part if a floating point is entered
-
-            print(whole_num)
-            print(fractional_num)
 
             iteration = len(whole_num)-1
 
@@ -182,11 +197,12 @@ def convert_number(input_number,source_base,target_base):
         
         #If input num is not a floating-point number
         else:
+            result = 0
             for num in num_list:
                 if(num in hex_replacement):
                     num = hex_replacement[num] # If the character being iterated over is a hex letter it is mapped to its number value
-
-                result += float(num) * math.pow(int(source_base), iteration) # Converstion from binary to decimal or Hex to decimal
+            
+                result += int(float(num) * math.pow(int(source_base), iteration)) # Converstion from binary to decimal or Hex to decimal
                 iteration -= 1 #Subtracting by one as the code is solving it from left to right
 
             return result #The result is returned 
@@ -201,7 +217,7 @@ def convert_number(input_number,source_base,target_base):
         binary_to_hex_replacement = {'0000': '0', '0001': '1', '0010': '2', '0011': '3', '0100': '4', '0101': '5', '0110': '6', '0111': '7', '1000': '8', '1001': '9', 
                                      '1010': 'A', '1011': 'B', '1100': 'C', '1101': 'D', '1110': 'E', '1111': 'F'}
         fractional_check = input_number.count(".")
-        fractional_hex = "0" #sets 0 as a placeholder incase no fractional is given
+        fractional_hex = "" #sets blank as a placeholder incase no fractional is given
 
         if(input_number[0]=="-"): #Checking if the first character is a "-" which means the input is negative 
             input_number = input_number_backup #getting the original users input and re assigning to input_value
@@ -222,7 +238,6 @@ def convert_number(input_number,source_base,target_base):
             dot_index = input_number_binary.index(".") #gets new dot index of binary number
             fractional_part = input_number_binary[(dot_index + 1) :] #get the fractional part
             length_of_fractional_part = len(fractional_part) #length of fractional part for padding
-            fractional_hex = ""
             placeholder = ""
             zero_add = 0
 
@@ -310,22 +325,27 @@ def convert_number(input_number,source_base,target_base):
                     count = -1
 
                 count += 1
-        
-            return result + "." + fractional_hex #Returning the result
+
+            if (fractional_hex != ""):
+                return result + "." + fractional_hex #Returning the result
+            else:
+                return result
+
+            
 
 
         else: #Handles conversions of base 10 to base 16
             input_number = input_number_backup #Recalling the backup number 
-            input_number = float(input_number) #Convert to integer and if successful then we continue 
+            input_number = int(input_number) #Convert to integer and if successful then we continue 
             result_list = [] #Empty list to store the values of the result but will be backwrds
             result = "" #Empty string to store the final result in the correct order
-            deci_replacement = {'10.0':'A', "11.0":'B','12.0':'C','13.0':'D','14.0':'E','15.0':'F'} # Dictionary to map decimal values to hex
+            deci_replacement = {'10':'A', "11":'B','12':'C','13':'D','14':'E','15':'F'} # Dictionary to map decimal values to hex
 
 
             while(input_number != 0): 
                 rem = input_number%16 # Getting the remanider and storing it in rem
                 result_list.append(str(rem)) # Storing the remainder as a string in the result list
-                input_number = math.floor(input_number/16) #Dividing the number by 2 and flooring it to ensure there are no decimals 
+                input_number = math.floor(input_number/16) #Dividing the number by 2 and flooring it to ensure there are no decimals
 
             result_list = result_list[::-1] #Reversing the list
 
@@ -339,7 +359,10 @@ def convert_number(input_number,source_base,target_base):
                 
                 result += num # Adding the string value of num into the result 
             
-            return result + "." + fractional_hex #Returning the result 
+            if (fractional_hex != ""):
+                return result + "." + fractional_hex #Returning the result
+            else:
+                return result   
 
 
 
